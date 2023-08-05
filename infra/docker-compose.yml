@@ -1,17 +1,55 @@
-version: '3.3'
+---
+version: '3.8'
+
+volumes:
+  pg_data:
+  static:
+  media:
+
 services:
 
+  backend:
+    container_name: foodgram_back
+    build: ../backend/
+    # image: xaverd/foodgram_backend
+    restart: always
+    env_file: ../.env
+    volumes:
+      - static:/app/static
+      - media:/app/media
+    depends_on:
+      - db
+
+  db:
+    container_name: foodgram_db
+    image: postgres:13.0-alpine
+    volumes:
+      - pg_data:/var/lib/postgresql/data/
+    env_file:
+      - ../.env
+
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    container_name: foodgram_front
+    build: ../frontend/
+    # image: xaverd/foodgram_frontend
     volumes:
       - ../frontend/:/app/result_build/
+    depends_on:
+      - backend
+
   nginx:
-    image: nginx:1.19.3
+    container_name: foodgram_gateway
+    image: nginx:1.21.3-alpine
     ports:
       - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ../frontend/build:/usr/share/nginx/html/
       - ../docs/:/usr/share/nginx/html/api/docs/
+      - static:/var/html/static/
+      - media:/var/html/media/
+    depends_on:
+      - backend
+      - frontend
+    restart: always
+...
