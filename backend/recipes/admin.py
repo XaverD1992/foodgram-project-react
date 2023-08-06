@@ -1,6 +1,6 @@
+from backend.settings import ADMIN_EMPTY_VALUE
 from django.contrib import admin
 
-from backend.settings import ADMIN_EMPTY_VALUE
 from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag)
 

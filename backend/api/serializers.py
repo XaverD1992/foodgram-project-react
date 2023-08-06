@@ -1,11 +1,10 @@
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from drf_base64.fields import Base64ImageField
-from rest_framework import exceptions, serializers, status
-from rest_framework.validators import UniqueTogetherValidator
-
 from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag)
+from rest_framework import exceptions, serializers, status
+from rest_framework.validators import UniqueTogetherValidator
 from users.models import Subscription, User
 
 

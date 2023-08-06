@@ -1,6 +1,5 @@
-from django.contrib import admin
-
 from backend.settings import ADMIN_EMPTY_VALUE
+from django.contrib import admin
 
 from .models import Subscription, User
 

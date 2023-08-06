@@ -1,7 +1,6 @@
+from backend.settings import NAME_LENGTH
 from django.core.validators import MinValueValidator
 from django.db import models
-
-from backend.settings import NAME_LENGTH
 from users.models import User
 
 

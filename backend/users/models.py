@@ -1,7 +1,7 @@
+from backend.settings import EMAIL_LENGTH, PASSWORD_LENGTH, USER_NAME_LENGTH
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from backend.settings import EMAIL_LENGTH, PASSWORD_LENGTH, USER_NAME_LENGTH
 from users.validators import validate_username
 
 
