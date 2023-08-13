@@ -24,6 +24,7 @@ class Command(BaseCommand):
                   'r') as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
             for row in csv_reader:
-                Ingredient.objects.create(name=row[0], measurement_unit=row[1])
+                Ingredient.objects.get_or_create(name=row[0],
+                                                 measurement_unit=row[1])
 
         self.stdout.write("The ingredients has been loaded successfully.")

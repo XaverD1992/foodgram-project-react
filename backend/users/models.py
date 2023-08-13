@@ -1,4 +1,4 @@
-from backend.settings import EMAIL_LENGTH, PASSWORD_LENGTH, USER_NAME_LENGTH
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -11,31 +11,28 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ('username', 'first_name', 'last_name',)
 
     first_name = models.CharField(
-        'Имя',
-        max_length=USER_NAME_LENGTH,
+        max_length=settings.USER_NAME_LENGTH,
     )
     last_name = models.CharField(
-        'Фамилия',
-        max_length=USER_NAME_LENGTH,
+        max_length=settings.USER_NAME_LENGTH,
     )
     email = models.EmailField(
         'Электронная почта',
-        max_length=EMAIL_LENGTH,
+        max_length=settings.EMAIL_LENGTH,
         unique=True
     )
     username = models.CharField(
         'Логин',
-        max_length=USER_NAME_LENGTH,
+        max_length=settings.USER_NAME_LENGTH,
         unique=True,
         validators=[validate_username, ]
     )
     password = models.CharField(
-        'Пароль',
-        max_length=PASSWORD_LENGTH,
+        max_length=settings.PASSWORD_LENGTH,
     )
 
     class Meta:
-        ordering = ['id']
+        ordering = ('username',)
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 

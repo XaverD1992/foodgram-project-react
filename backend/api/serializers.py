@@ -1,11 +1,12 @@
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from drf_base64.fields import Base64ImageField
+from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
+
 from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag)
-from rest_framework import exceptions, serializers, status
-from rest_framework.validators import UniqueTogetherValidator
-from users.models import Subscription, User
+from users.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -16,6 +17,14 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'email', 'username',
                   'first_name', 'last_name', 'is_subscribed',)
+
+    def validate(self, obj):
+        """Проверка подписки на самого себя."""
+        if (self.context['request'].user == obj):
+            raise serializers.ValidationError(
+                'Нельзя подписаться на самого себя.'
+            )
+        return obj
 
     def get_is_subscribed(self, author):
         """Проверка подписки пользователей."""
@@ -44,22 +53,6 @@ class SubscribeSerializer(UserSerializer):
     class Meta(UserSerializer.Meta):
         fields = UserSerializer.Meta.fields + ('recipes', 'recipes_count',)
         read_only_fields = ('email', 'username', 'last_name', 'first_name',)
-
-    def validate(self, data):
-        """Проверка на наличие подписки у пользователя."""
-        author = self.instance
-        user = self.context.get('request').user
-        if Subscription.objects.filter(user=user, author=author).exists():
-            raise exceptions.ValidationError(
-                {'errors': 'Подписка уже существует.'},
-                code=status.HTTP_400_BAD_REQUEST
-            )
-        if user == author:
-            raise exceptions.ValidationError(
-                {'errors': 'Нельзя подписаться на самого себя.'},
-                code=status.HTTP_400_BAD_REQUEST
-            )
-        return data
 
     def get_recipes_count(self, obj):
         """Получение количества рецептов."""
@@ -96,11 +89,14 @@ class IngredientGetSerializer(serializers.ModelSerializer):
     """Сериализатор для получения информации об ингредиентах."""
     id = serializers.ReadOnlyField(source='ingredient.id')
     name = serializers.ReadOnlyField(source='ingredient.name')
-    unit = serializers.ReadOnlyField()
+    measurement_unit = serializers.CharField(
+        source='ingredient.measurement_unit',
+        read_only=True
+    )
 
     class Meta:
         model = RecipeIngredient
-        fields = ('id', 'name', 'unit', 'amount')
+        fields = ('id', 'name', 'measurement_unit', 'amount')
 
 
 class IngredientPostSerializer(serializers.ModelSerializer):
@@ -131,17 +127,15 @@ class RecipeGetSerializer(serializers.ModelSerializer):
 
     def get_is_favorited(self, obj):
         request = self.context.get('request')
+        user = request.user
         return (request and request.user.is_authenticated
-                and Favorite.objects.filter(
-                    user=request.user, recipe=obj
-                ).exists())
+                and user.favorites.filter(recipe=obj).exists())
 
     def get_is_in_shopping_cart(self, obj):
         request = self.context.get('request')
+        user = request.user
         return (request and request.user.is_authenticated
-                and ShoppingCart.objects.filter(
-                    user=request.user, recipe=obj
-                ).exists())
+                and user.favorites.filter(recipe=obj).exists())
 
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
@@ -172,6 +166,20 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
                 'Нельзя вводить одинаковые игредиенты'
             )
         return value
+
+    def validate(self, data):
+        """Проверка тегов и времени готовки."""
+        tags = data.get('tags')
+        if len(tags) != len(set([item for item in tags])):
+            raise serializers.ValidationError({
+                'tags': 'Тэги не должны повторяться!'})
+
+        cooking_time = data.get('cooking_time')
+        if cooking_time > 300 or cooking_time < 1:
+            raise serializers.ValidationError({
+                'Время приготовления блюда от 1 до 300 минут'
+            })
+        return data
 
     @transaction.atomic
     def set_ingredients(self, ingredients, recipe):
@@ -206,10 +214,8 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         instance.tags.clear()
         instance.tags.set(tags)
         RecipeIngredient.objects.filter(recipe=instance).delete()
-        super().update(instance, validated_data)
         self.set_ingredients(ingredients, instance)
-        instance.save()
-        return instance
+        return super().update(instance, validated_data)
 
     def to_representation(self, instance):
         request = self.context.get('request')

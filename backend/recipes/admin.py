@@ -1,4 +1,4 @@
-from backend.settings import ADMIN_EMPTY_VALUE
+from django.conf import settings
 from django.contrib import admin
 
 from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
@@ -10,7 +10,7 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'color', 'slug')
     search_fields = ('name', 'color', 'slug')
     list_filter = ('name', 'color', 'slug')
-    empty_value_display = ADMIN_EMPTY_VALUE
+    empty_value_display = settings.ADMIN_EMPTY_VALUE
 
 
 @admin.register(Ingredient)
@@ -18,7 +18,7 @@ class IngredientAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'measurement_unit')
     search_fields = ('name',)
     list_filter = ('name',)
-    empty_value_display = ADMIN_EMPTY_VALUE
+    empty_value_display = settings.ADMIN_EMPTY_VALUE
 
 
 class RecipeIngredientInline(admin.TabularInline):
@@ -30,7 +30,7 @@ class RecipeAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'author', 'favorites_amount')
     search_fields = ('name', 'author')
     list_filter = ('name', 'author', 'tags')
-    empty_value_display = ADMIN_EMPTY_VALUE
+    empty_value_display = settings.ADMIN_EMPTY_VALUE
     inlines = [
         RecipeIngredientInline,
     ]
@@ -42,18 +42,18 @@ class RecipeAdmin(admin.ModelAdmin):
 @admin.register(RecipeIngredient)
 class RecipeIngredientAdmin(admin.ModelAdmin):
     list_display = ('pk', 'recipe', 'ingredient', 'amount')
-    empty_value_display = ADMIN_EMPTY_VALUE
+    empty_value_display = settings.ADMIN_EMPTY_VALUE
 
 
 @admin.register(Favorite)
 class FavoriteAdmin(admin.ModelAdmin):
     list_display = ('pk', 'user', 'recipe')
     search_fields = ('user', 'recipe')
-    empty_value_display = ADMIN_EMPTY_VALUE
+    empty_value_display = settings.ADMIN_EMPTY_VALUE
 
 
 @admin.register(ShoppingCart)
 class ShoppingCartAdmin(admin.ModelAdmin):
     list_display = ('pk', 'user', 'recipe')
     search_fields = ('user', 'recipe')
-    empty_value_display = ADMIN_EMPTY_VALUE
+    empty_value_display = settings.ADMIN_EMPTY_VALUE

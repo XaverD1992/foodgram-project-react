@@ -6,10 +6,10 @@ from .views import (CustomUserViewSet, IngredientViewSet, RecipeViewSet,
 
 v1_router = DefaultRouter()
 
-v1_router.register(r'tags', TagViewSet, basename='tags')
-v1_router.register(r'ingredients', IngredientViewSet, basename='ingredients')
-v1_router.register(r'recipes', RecipeViewSet, basename='recipes')
-v1_router.register(r'users', CustomUserViewSet, basename='users')
+v1_router.register('tags', TagViewSet, basename='tags')
+v1_router.register('ingredients', IngredientViewSet, basename='ingredients')
+v1_router.register('recipes', RecipeViewSet, basename='recipes')
+v1_router.register('users', CustomUserViewSet, basename='users')
 
 
 urlpatterns = [

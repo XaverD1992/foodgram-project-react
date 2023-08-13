@@ -11,6 +11,8 @@ EMAIL_LENGTH = 254
 PASSWORD_LENGTH = 150
 ADMIN_EMPTY_VALUE = '-empty-'
 FILE_NAME = 'shopping_cart.txt'
+PAGE_SIZE = 6
+MAX_LENGTH = 200
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -35,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_filters',
     'djoser',
+    'colorfield',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
@@ -116,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'UTC'
 
@@ -151,10 +154,6 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
     ],
-
-    'DEFAULT_PAGINATION_CLASS': 'api.pagination.CustomizedPaginator',
-
-    'PAGE_SIZE': 6,
 }
 
 CORS_ALLOWED_ORIGINS = [
@@ -165,7 +164,7 @@ CORS_URLS_REGEX = r'^/api/.*$'
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
-    'HIDE_USER': 'True',
+    'HIDE_USER': False,
     'SERIALIZERS': {
         'current_user': 'api.serializers.UserSerializer',
     },
