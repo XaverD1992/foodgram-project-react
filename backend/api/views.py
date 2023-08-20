@@ -132,7 +132,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def destroy_favorite(self, request, pk):
         is_deleted = Favorite.objects.filter(user=request.user,
                                              recipe=get_object_or_404(
-                                                Recipe, id=pk)).delete()
+                                             Recipe, id=pk)).delete()
         if is_deleted[0]:
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response({'message': 'Рецепт не был добавлен в избранное'},
@@ -151,7 +151,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def destroy_shopping_cart(self, request, pk):
         is_deleted = ShoppingCart.objects.filter(user=request.user,
                                                  recipe=get_object_or_404(
-                                                    Recipe, id=pk)).delete()
+                                                 Recipe, id=pk)).delete()
         if is_deleted[0]:
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response({'message': 'Рецепт не был добавлен в корзину'},
