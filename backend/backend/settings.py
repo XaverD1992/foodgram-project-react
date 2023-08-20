@@ -12,7 +12,8 @@ PASSWORD_LENGTH = 150
 ADMIN_EMPTY_VALUE = '-empty-'
 FILE_NAME = 'shopping_cart.txt'
 PAGE_SIZE = 6
-MAX_LENGTH = 200
+TAG_MAX_LENGTH = 50
+INGREDIENT_MAX_LENGTH = 50
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -132,10 +133,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = BASE_DIR / 'static'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -167,9 +168,5 @@ DJOSER = {
     'HIDE_USER': False,
     'SERIALIZERS': {
         'current_user': 'api.serializers.UserSerializer',
-    },
-    'PERMISSIONS': {
-        'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],
-        'user_list': ['rest_framework.permissions.AllowAny'],
     },
 }

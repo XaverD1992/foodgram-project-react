@@ -57,7 +57,7 @@ class Tag(models.Model):
     """Модель тегов."""
     name = models.CharField(
         'Название',
-        max_length=settings.MAX_LENGTH,
+        max_length=settings.TAG_MAX_LENGTH,
         unique=True
     )
     color = ColorField(
@@ -67,7 +67,7 @@ class Tag(models.Model):
     )
     slug = models.SlugField(
         'Слаг',
-        max_length=settings.MAX_LENGTH,
+        max_length=settings.TAG_MAX_LENGTH,
         unique=True
     )
 
@@ -84,11 +84,11 @@ class Ingredient(models.Model):
     """Модель ингредиентов."""
     name = models.CharField(
         'Название',
-        max_length=settings.MAX_LENGTH,
+        max_length=settings.INGREDIENT_MAX_LENGTH,
     )
     measurement_unit = models.CharField(
         'Единица измерения',
-        max_length=settings.MAX_LENGTH,
+        max_length=settings.INGREDIENT_MAX_LENGTH,
     )
 
     class Meta:
@@ -105,11 +105,13 @@ class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
+        related_name='recipeingredients',
         verbose_name='Рецепт'
     )
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
+        related_name='recipeingredients',
         verbose_name='Ингредиент'
     )
     amount = models.PositiveSmallIntegerField(
@@ -122,9 +124,12 @@ class RecipeIngredient(models.Model):
     )
 
     class Meta:
-        default_related_name = 'recipeingredients'
         verbose_name = 'Ингредиент в рецепте'
         verbose_name_plural = 'Ингредиенты в рецепте'
+        constraints = [
+            models.UniqueConstraint(
+                fields=('recipe', 'ingredient'),
+                name='unique_pair')]
 
 
 class Favorite(models.Model):
