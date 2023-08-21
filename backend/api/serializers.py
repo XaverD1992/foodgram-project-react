@@ -51,7 +51,13 @@ class SubscribeRepresentSerializer(UserSerializer):
 
     def get_recipes(self, obj):
         """Получение рецептов."""
+        request = self.context.get('request')
+        recipes_limit = None
+        if request:
+            recipes_limit = request.query_params.get('recipes_limit')
         recipes = obj.recipes.all()
+        if recipes_limit:
+            recipes = obj.recipes.all()[:int(recipes_limit)]
         return RecipeSerializer(recipes, many=True).data
 
 
@@ -76,12 +82,6 @@ class SubscribeSerializer(serializers.ModelSerializer):
             )
         return data
 
-    def to_representation(self, instance):
-        request = self.context.get('request')
-        return SubscribeRepresentSerializer(
-            instance.author, context={'request': request}
-        ).data
-
 
 class IngredientSerializer(serializers.ModelSerializer):
     """Получение списка или одного ингрединета."""
@@ -101,9 +101,8 @@ class IngredientGetSerializer(serializers.ModelSerializer):
     """Сериализатор для получения информации об ингредиентах."""
     id = serializers.ReadOnlyField(source='ingredient.id')
     name = serializers.ReadOnlyField(source='ingredient.name')
-    measurement_unit = serializers.CharField(
-        source='ingredient.measurement_unit',
-        read_only=True
+    measurement_unit = serializers.ReadOnlyField(
+        source='ingredient.measurement_unit'
     )
 
     class Meta:
@@ -185,9 +184,9 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
                 'tags': 'Тэги не должны повторяться!'})
 
         cooking_time = data.get('cooking_time')
-        if cooking_time > 300 or cooking_time < 1:
+        if cooking_time > 1000 or cooking_time < 1:
             raise serializers.ValidationError({
-                'Время приготовления блюда от 1 до 300 минут'
+                'Время приготовления блюда от 1 до 1000 минут'
             })
         return data
 
@@ -221,7 +220,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         tags = validated_data.pop('tags')
         instance.tags.clear()
         instance.tags.set(tags)
-        RecipeIngredient.objects.filter(recipe=instance).clear()
+        instance.recipeingredients.clear()
         self.set_ingredients(ingredients, instance)
         return super().update(instance, validated_data)
 

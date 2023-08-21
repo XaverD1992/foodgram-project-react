@@ -165,8 +165,12 @@ CORS_URLS_REGEX = r'^/api/.*$'
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
-    'HIDE_USER': False,
+    'HIDE_USERS': False,
     'SERIALIZERS': {
         'current_user': 'api.serializers.UserSerializer',
+    },
+    'PERMISSIONS': {
+        "user": ["djoser.permissions.CurrentUserOrAdminOrReadOnly"],
+        "user_list": ["rest_framework.permissions.IsAuthenticatedOrReadOnly"],
     },
 }
