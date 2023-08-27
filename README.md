@@ -36,37 +36,36 @@ TELEGRAM_TOKEN= #ID бота в Telegram
 Выполнить команды:
 
 *   git add .
-*   git commit -m "Коммит"
+*   git commit -m "Commit"
 *   git push
 
 После этого будут запущены процессы workflow:
 
-*   проверка кода на соответствие стандарту PEP8 (с помощью пакета flake8) и запуск pytest
-*   сборка и доставка докер-образа для контейнера web на Docker Hub
+*   сборка и доставка докер-образа для контейнера backend на Docker Hub
 *   автоматический деплой проекта на боевой сервер
 *   отправка уведомления в Telegram о том, что процесс деплоя успешно завершился
 
 После успешного завершения процессов workflow на боевом сервере должны будут выполнены следующие команды:
 
 ```
-sudo docker-compose exec web python manage.py migrate
+sudo docker-compose exec backend python manage.py migrate
 
 ```
 
 
 ```
-sudo docker-compose exec web python manage.py collectstatic --no-input 
+sudo docker-compose exec backend python manage.py collectstatic --no-input 
 ```
 
 Затем необходимо будет создать суперюзера и загрузить в базу данных информацию об ингредиентах:
 
 ```
-sudo docker-compose exec web python manage.py createsuperuser
+sudo docker-compose exec backend python manage.py createsuperuser
 
 ```
 
 ```
-sudo docker-compose exec web python manage.py load_data_csv --path <путь_к_файлу> --model_name <имя_модели> --app_name <название_приложения>
+sudo docker-compose exec web python manage.py load_ingredients
 
 ```
 
@@ -74,8 +73,8 @@ sudo docker-compose exec web python manage.py load_data_csv --path <путь_к_
 
 Клонировать репозиторий и перейти в него в командной строке:
 
-``` git@github.com:mariyabykova/foodgram-project-react.git ``` 
-``` cd foodgram-project-react ``` 
+``` git@github.com:XaverD1992/foodgram-project-react.git ``` 
+``` cd foodgram-project-react/infra ``` 
 
 Запустить docker-compose:
 
@@ -87,21 +86,21 @@ docker-compose up
 После окончания сборки контейнеров выполнить миграции:
 
 ```
-docker-compose exec web python manage.py migrate
+docker-compose exec backend python manage.py migrate
 
 ```
 
 Создать суперпользователя:
 
 ```
-docker-compose exec web python manage.py createsuperuser
+docker-compose exec backend python manage.py createsuperuser
 
 ```
 
 Загрузить статику:
 
 ```
-docker-compose exec web python manage.py collectstatic --no-input 
+docker-compose exec backend python manage.py collectstatic --no-input 
 
 ```
 
@@ -116,7 +115,7 @@ http://localhost/
 
 Клонировать репозиторий и перейти в него в командной строке:
 
-``` git@github.com:mariyabykova/foodgram-project-react.git ``` 
+``` git@github.com:XaverD1992/foodgram-project-react.git ``` 
 ``` cd foodgram-project-react ``` 
 
 Создать и активировать виртуальное окружение:
@@ -185,4 +184,4 @@ http://localhost/
 
 ### Автор проекта
 
-**Владислав Суворов.** 
+**Владислав Суворов** 
