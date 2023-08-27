@@ -84,7 +84,7 @@ sudo docker-compose exec backend python manage.py load_ingredients
 ``` git@github.com:XaverD1992/foodgram-project-react.git ``` 
 ``` cd foodgram-project-react/infra ``` 
 
-Установить на сервере docker и docker-compose. Скопировать на сервер файлы docker-compose.yaml и nginx.conf:
+Установить на сервере docker и docker-compose.
 
 - Для работы с GitHub Actions необходимо в репозитории в разделе Secrets > Actions создать переменные окружения:
 ```
