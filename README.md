@@ -11,73 +11,8 @@ email: lop@mail.ru
 
 password: e1xdD990
 
-### Как запустить проект на боевом сервере:
 
-Установить на сервере docker и docker-compose. Скопировать на сервер файлы docker-compose.yaml и nginx.conf:
-
-```
-scp docker-compose.yml <логин_на_сервере>@<IP_сервера>:/home/<логин_на_сервере>/docker-compose.yml
-scp nginx.conf <логин_на_сервере>@<IP_сервера>:/home/<логин_на_сервере>/nginx.conf
-
-```
-
-Добавить в Secrets на Github следующие данные:
-
-```
-DB_ENGINE=django.db.backends.postgresql # указать, что проект работает с postgresql
-DB_NAME=postgres # имя базы данных
-POSTGRES_USER=postgres # логин для подключения к базе данных
-POSTGRES_PASSWORD=postgres # пароль для подключения к БД
-DB_HOST=db # название сервиса БД (контейнера) 
-DB_PORT=5432 # порт для подключения к БД
-DOCKER_PASSWORD= # Пароль от аккаунта на DockerHub
-DOCKER_USERNAME= # Username в аккаунте на DockerHub
-HOST= # IP удалённого сервера
-USER= # Логин на удалённом сервере
-SSH_KEY= # SSH-key компьютера, с которого будет происходить подключение к удалённому серверу
-SSH_PASSPHRASE= #Если для ssh используется фраза-пароль
-TELEGRAM_TO= #ID пользователя в Telegram
-TELEGRAM_TOKEN= #ID бота в Telegram
-
-```
-
-Выполнить команды:
-
-*   git add .
-*   git commit -m "Commit"
-*   git push
-
-После этого будут запущены процессы workflow:
-
-*   сборка и доставка докер-образа для контейнера backend на Docker Hub
-*   автоматический деплой проекта на боевой сервер
-*   отправка уведомления в Telegram о том, что процесс деплоя успешно завершился
-
-После успешного завершения процессов workflow на боевом сервере должны будут выполнены следующие команды:
-
-```
-sudo docker-compose exec backend python manage.py migrate
-
-```
-
-
-```
-sudo docker-compose exec backend python manage.py collectstatic --no-input 
-```
-
-Затем необходимо будет создать суперюзера и загрузить в базу данных информацию об ингредиентах:
-
-```
-sudo docker-compose exec backend python manage.py createsuperuser
-
-```
-
-```
-sudo docker-compose exec backend python manage.py load_ingredients
-
-```
-
-### Как запустить проект локально в контейнерах:
+### Как запустить проект на сервере в контейнерах:
 
 Клонировать репозиторий и перейти в него в командной строке:
 
