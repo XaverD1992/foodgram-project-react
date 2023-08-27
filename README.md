@@ -35,7 +35,7 @@ DOCKER_USERNAME= # Username в аккаунте на DockerHub
 HOST= # IP удалённого сервера
 USER= # Логин на удалённом сервере
 SSH_KEY= # SSH-key компьютера, с которого будет происходить подключение к удалённому серверу
-PASSPHRASE= #Если для ssh используется фраза-пароль
+SSH_PASSPHRASE= #Если для ssh используется фраза-пароль
 TELEGRAM_TO= #ID пользователя в Telegram
 TELEGRAM_TOKEN= #ID бота в Telegram
 
