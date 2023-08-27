@@ -84,6 +84,26 @@ sudo docker-compose exec backend python manage.py load_ingredients
 ``` git@github.com:XaverD1992/foodgram-project-react.git ``` 
 ``` cd foodgram-project-react/infra ``` 
 
+- Для работы с GitHub Actions необходимо в репозитории в разделе Secrets > Actions создать переменные окружения:
+```
+SECRET_KEY              # секретный ключ Django проекта
+DOCKER_PASSWORD         # пароль от Docker Hub
+DOCKER_USERNAME         # логин Docker Hub
+HOST                    # публичный IP сервера
+USER                    # имя пользователя на сервере
+SSH_PASSPHRASE              # *если ssh-ключ защищен паролем
+SSH_KEY                 # приватный ssh-ключ
+TELEGRAM_TO             # ID телеграм-аккаунта для посылки сообщения
+TELEGRAM_TOKEN          # токен бота, посылающего сообщение
+
+DB_ENGINE               # django.db.backends.postgresql
+DB_NAME                 # postgres
+POSTGRES_USER           # postgres
+POSTGRES_PASSWORD       # postgres
+DB_HOST                 # db
+DB_PORT                 # 5432 (порт по умолчанию)
+```
+
 Запустить docker-compose:
 
 ```
