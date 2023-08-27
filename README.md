@@ -132,10 +132,11 @@ docker-compose exec backend python manage.py collectstatic --no-input
 
 ```
 
-Проверить работу проекта по ссылке:
+Загрузить инредиенты:
 
 ```
-http://localhost/
+sudo docker-compose exec backend python manage.py load_ingredients
+
 ```
 
 
