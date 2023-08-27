@@ -65,7 +65,7 @@ sudo docker-compose exec backend python manage.py createsuperuser
 ```
 
 ```
-sudo docker-compose exec web python manage.py load_ingredients
+sudo docker-compose exec backend python manage.py load_ingredients
 
 ```
 
