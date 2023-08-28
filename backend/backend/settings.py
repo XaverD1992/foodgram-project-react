@@ -163,6 +163,8 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_URLS_REGEX = r'^/api/.*$'
 
+CSRF_TRUSTED_ORIGINS = ['https://vinm.ddns.net']
+
 DJOSER = {
     'LOGIN_FIELD': 'email',
     'HIDE_USERS': False,
@@ -170,7 +172,7 @@ DJOSER = {
         'current_user': 'api.serializers.UserSerializer',
     },
     'PERMISSIONS': {
-        "user": ["djoser.permissions.CurrentUserOrAdminOrReadOnly"],
+        "user": ["rest_framework.permissions.IsAuthenticatedOrReadOnly"],
         "user_list": ["rest_framework.permissions.IsAuthenticatedOrReadOnly"],
     },
 }

@@ -10,7 +10,7 @@ services:
 
   backend:
     container_name: foodgram_back
-    build: ../backend/
+    image: xaverd/foodgram_backend
     restart: always
     env_file: ../.env
     volumes:
@@ -29,7 +29,7 @@ services:
 
   frontend:
     container_name: foodgram_front
-    build: ../frontend/
+    image: xaverd/foodgram_frontend
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
