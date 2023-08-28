@@ -44,7 +44,7 @@ DB_PORT                 # 5432 (порт по умолчанию)
 Запустить docker-compose:
 
 ```
-docker-compose up
+docker-compose up -d
 
 ```
 
@@ -77,7 +77,7 @@ sudo docker-compose exec backend python manage.py load_ingredients
 ```
 
 
-### Как запустить проект локально:
+### Как запустить бэкенд локально:
 
 Клонировать репозиторий и перейти в него в командной строке:
 
