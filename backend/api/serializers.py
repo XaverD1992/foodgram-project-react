@@ -119,6 +119,12 @@ class IngredientPostSerializer(serializers.ModelSerializer):
         model = RecipeIngredient
         fields = ('id', 'amount')
 
+    def validate_amount(self, value):
+        if value < 1:
+            raise serializers.ValidationError('Количетво ингредиента'
+                                              'не может быть меньше 1!')
+        return value
+
 
 class RecipeGetSerializer(serializers.ModelSerializer):
     """Сериализатор для получения информации о рецептах."""
@@ -220,7 +226,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         tags = validated_data.pop('tags')
         instance.tags.clear()
         instance.tags.set(tags)
-        instance.recipeingredients.clear()
+        instance.ingredients.clear()
         self.set_ingredients(ingredients, instance)
         return super().update(instance, validated_data)
 
